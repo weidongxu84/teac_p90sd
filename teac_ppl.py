@@ -13,7 +13,7 @@ from typing import List
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('directories', nargs='+', default=os.getcwd())
-    parser.add_argument('--playlist', nargs='?', default='playlist.ppl')
+    parser.add_argument('--playlist', nargs='?', default=None)
     args = parser.parse_args()
 
     playlist_filename = args.playlist
@@ -22,6 +22,12 @@ def main():
     directories = args.directories
     for directory in directories:
         file_list.extend(collect_files_in_directory(directory))
+
+    if not playlist_filename:
+        if len(directories) == 1:
+            playlist_filename = f'A] {os.path.basename(directories[0])}.ppl'
+        else:
+            playlist_filename = 'playlist.ppl'
 
     item_list = []
     for filename in file_list:
